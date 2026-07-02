@@ -910,9 +910,291 @@
         0 0 18px rgba(26,140,255,.18);
 }
 
+
+/* ===== MODERN UI UPGRADE ===== */
+
+body{
+    background:
+        radial-gradient(circle at top left, rgba(26,140,255,.12), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(108,92,231,.12), transparent 30%),
+        #0b0e1a;
+}
+
+.main-content{
+    animation: fadeMain .6s ease;
+}
+
+@keyframes fadeMain{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.sidebar{
+    background:rgba(8,11,20,.88);
+    border-right:1px solid rgba(255,255,255,.06);
+    box-shadow:0 0 40px rgba(26,140,255,.08);
+}
+
+.header{
+    background:rgba(255,255,255,.02);
+    border:1px solid rgba(255,255,255,.04);
+    padding:22px 26px;
+    border-radius:24px;
+    backdrop-filter:blur(14px);
+}
+
+.menu-card,
+.price-card,
+.contact-item,
+.test-bot-box,
+.modal-box{
+    backdrop-filter:blur(14px);
+    background:rgba(255,255,255,.03);
+    border:1px solid rgba(255,255,255,.06);
+}
+
+.menu-card:hover,
+.price-card:hover,
+.contact-item:hover{
+    box-shadow:
+        0 12px 30px rgba(26,140,255,.10),
+        0 0 0 1px rgba(255,255,255,.03);
+}
+
+.action-btn,
+.btn-small,
+.btn-primary,
+.btn-outline,
+.btn-modal{
+    position:relative;
+    overflow:hidden;
+}
+
+.action-btn::before,
+.btn-small::before,
+.btn-primary::before,
+.btn-outline::before,
+.btn-modal::before{
+    content:'';
+    position:absolute;
+    top:0;
+    left:-120%;
+    width:100%;
+    height:100%;
+    background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.18),
+        transparent
+    );
+    transition:.6s;
+}
+
+.action-btn:hover::before,
+.btn-small:hover::before,
+.btn-primary:hover::before,
+.btn-outline:hover::before,
+.btn-modal:hover::before{
+    left:120%;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
 </style>
 </head>
 <body>
+
+<!-- ===== LOBBY SCREEN ===== -->
+<div class="welcome-screen" id="welcomeScreen">
+
+    <div class="welcome-box">
+
+        <div class="welcome-badge">
+            ER-SHOP AI
+        </div>
+
+        <h1>
+            Welcome To <span>Er-Shop</span>
+        </h1>
+
+        <p>
+            Modern AI Dashboard Store Experience
+        </p>
+
+        <button class="enter-btn" id="enterWebsite">
+            Masuk Ke Website
+        </button>
+
+    </div>
+
+</div>
+
+<style>
+
+.welcome-screen{
+    position:fixed;
+    inset:0;
+    z-index:999999;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:
+        radial-gradient(circle at top left,
+        rgba(26,140,255,.15), transparent 30%),
+
+        radial-gradient(circle at bottom right,
+        rgba(108,92,231,.15), transparent 30%),
+
+        #070b14;
+
+    transition:.7s ease;
+}
+
+.welcome-screen.hide{
+    opacity:0;
+    visibility:hidden;
+}
+
+.welcome-box{
+    width:min(92%, 500px);
+    padding:50px 35px;
+    border-radius:32px;
+    text-align:center;
+
+    background:rgba(255,255,255,.04);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    backdrop-filter:blur(16px);
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.35),
+        0 0 30px rgba(26,140,255,.08);
+}
+
+.welcome-badge{
+    display:inline-block;
+    padding:8px 18px;
+    border-radius:999px;
+    background:rgba(26,140,255,.12);
+    color:#6cb6ff;
+    margin-bottom:18px;
+    font-size:.85rem;
+    letter-spacing:1px;
+}
+
+.welcome-box h1{
+    color:white;
+    font-size:2.3rem;
+    margin-bottom:12px;
+}
+
+.welcome-box h1 span{
+    background:linear-gradient(90deg,#1a8cff,#8b5cf6);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.welcome-box p{
+    color:#94a3b8;
+    margin-bottom:32px;
+}
+
+.enter-btn{
+    border:none;
+    outline:none;
+    padding:16px 28px;
+    border-radius:16px;
+    cursor:pointer;
+    font-size:1rem;
+    font-weight:600;
+    color:white;
+
+    background:linear-gradient(
+        135deg,
+        #1a8cff,
+        #8b5cf6
+    );
+
+    transition:.3s ease;
+}
+
+.enter-btn:hover{
+    transform:translateY(-4px) scale(1.02);
+
+    box-shadow:
+        0 12px 30px rgba(26,140,255,.25);
+}
+
+.main-hidden{
+    opacity:0;
+    transform:translateY(20px);
+    pointer-events:none;
+    transition:.7s ease;
+}
+
+.main-visible{
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:auto;
+}
+
+</style>
+
+
+<div class="bg-particles">
+    <span></span>
+    <span></span>
+    <span></span>
+</div>
+
+<style>
+.bg-particles span{
+    position:fixed;
+    width:220px;
+    height:220px;
+    border-radius:50%;
+    background:rgba(26,140,255,.06);
+    filter:blur(30px);
+    z-index:-1;
+    animation:floatParticle 12s infinite alternate ease-in-out;
+}
+
+.bg-particles span:nth-child(1){
+    top:5%;
+    left:5%;
+}
+
+.bg-particles span:nth-child(2){
+    bottom:10%;
+    right:8%;
+    background:rgba(108,92,231,.06);
+}
+
+.bg-particles span:nth-child(3){
+    top:45%;
+    left:40%;
+    background:rgba(0,212,255,.04);
+}
+
+@keyframes floatParticle{
+    from{
+        transform:translateY(0) translateX(0);
+    }
+    to{
+        transform:translateY(-40px) translateX(30px);
+    }
+}
+</style>
+
 
     <!-- ─── SIDEBAR TOGGLE ─── -->
     <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
@@ -1422,6 +1704,44 @@ document.addEventListener("DOMContentLoaded", function(){
             });
 
         });
+
+    });
+
+});
+
+</script>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function(){
+
+    const welcome =
+    document.getElementById("welcomeScreen");
+
+    const enterBtn =
+    document.getElementById("enterWebsite");
+
+    const main =
+    document.querySelector(".main-content");
+
+    if(main){
+        main.classList.add("main-hidden");
+    }
+
+    enterBtn.addEventListener("click", function(){
+
+        welcome.classList.add("hide");
+
+        if(main){
+
+            main.classList.remove("main-hidden");
+
+            setTimeout(()=>{
+                main.classList.add("main-visible");
+            },100);
+
+        }
 
     });
 

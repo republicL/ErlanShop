@@ -1749,5 +1749,251 @@ document.addEventListener("DOMContentLoaded", function(){
 
 </script>
 
+
+<style>
+/* ===== ULTRA MODERN ANIMATION PACK ===== */
+
+body{
+background:
+radial-gradient(circle at top left,rgba(0,212,255,.12),transparent 25%),
+radial-gradient(circle at bottom right,rgba(139,92,246,.15),transparent 25%),
+#050816;
+overflow-x:hidden;
+}
+
+body::before{
+content:'';
+position:fixed;
+inset:0;
+background:
+linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),
+linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
+background-size:40px 40px;
+pointer-events:none;
+}
+
+.menu-card,
+.price-card,
+.contact-item,
+.test-bot-box{
+animation:floatCard 4s ease-in-out infinite alternate;
+}
+
+@keyframes floatCard{
+from{transform:translateY(0px)}
+to{transform:translateY(-8px)}
+}
+
+.menu-card:hover,
+.price-card:hover,
+.contact-item:hover{
+transform:translateY(-10px) scale(1.03);
+box-shadow:
+0 0 30px rgba(0,212,255,.18),
+0 15px 50px rgba(0,0,0,.4);
+}
+
+.welcome-box{
+animation:welcomeZoom 1.2s ease;
+}
+
+@keyframes welcomeZoom{
+from{
+opacity:0;
+transform:scale(.85);
+}
+to{
+opacity:1;
+transform:scale(1);
+}
+}
+
+.enter-btn{
+animation:pulseGlow 2s infinite;
+}
+
+@keyframes pulseGlow{
+0%{box-shadow:0 0 0 rgba(26,140,255,.1)}
+50%{box-shadow:0 0 35px rgba(26,140,255,.45)}
+100%{box-shadow:0 0 0 rgba(26,140,255,.1)}
+}
+
+.ai-orbs{
+position:fixed;
+inset:0;
+pointer-events:none;
+z-index:-1;
+}
+
+.orb{
+position:absolute;
+border-radius:50%;
+filter:blur(35px);
+animation:moveOrb 18s infinite alternate ease-in-out;
+}
+
+.orb:nth-child(1){
+width:220px;
+height:220px;
+background:rgba(0,212,255,.10);
+top:5%;
+left:5%;
+}
+
+.orb:nth-child(2){
+width:260px;
+height:260px;
+background:rgba(139,92,246,.10);
+bottom:10%;
+right:5%;
+}
+
+.orb:nth-child(3){
+width:180px;
+height:180px;
+background:rgba(26,140,255,.08);
+top:50%;
+left:50%;
+}
+
+@keyframes moveOrb{
+to{
+transform:
+translateY(-40px)
+translateX(50px);
+}
+}
+</style>
+
+<div class="ai-orbs">
+<div class="orb"></div>
+<div class="orb"></div>
+<div class="orb"></div>
+</div>
+
+<style>
+.theme-toggle{position:fixed;top:15px;right:15px;z-index:99999;padding:10px 14px;border-radius:12px;border:none;cursor:pointer}
+.light-mode{background:#f4f7ff!important;color:#111!important}
+.typing-text::after{content:'|';animation:blink 1s infinite}
+@keyframes blink{50%{opacity:0}}
+</style>
+<button class="theme-toggle" id="themeBtn">🌙/☀️</button>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+const title=document.querySelector('.welcome-box h1');
+if(title){title.innerHTML='<span class="typing-text"></span>';let txt='Welcome To ErlanShops';let i=0;let el=document.querySelector('.typing-text');function type(){if(i<txt.length){el.textContent+=txt.charAt(i);i++;setTimeout(type,90)}} type();}
+const btn=document.getElementById('themeBtn');btn.onclick=()=>document.body.classList.toggle('light-mode');
+const pay=document.getElementById('payment');
+if(pay){pay.innerHTML+='<div style="margin-top:20px"><h3>Metode Pembayaran</h3><p>Dana : 0895322098098</p><p>Gopay : 085709862808</p></div>';pay.innerHTML=pay.innerHTML.replace(/No admin/gi,'');}
+});
+</script>
+
+<style>
+
+/* ===== THEME BUTTON ADAPTIVE ===== */
+
+.theme-toggle{
+    background:rgba(255,255,255,.08);
+    color:white;
+    backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,.12);
+    transition:.3s ease;
+}
+
+.theme-toggle:hover{
+    transform:translateY(-3px);
+    box-shadow:0 0 18px rgba(26,140,255,.25);
+}
+
+/* ===== LIGHT MODE ===== */
+
+body.light-mode{
+    background:#eef4ff !important;
+    color:#111827 !important;
+}
+
+body.light-mode .welcome-screen{
+    background:
+        radial-gradient(circle at top left,
+        rgba(26,140,255,.08), transparent 30%),
+
+        radial-gradient(circle at bottom right,
+        rgba(108,92,231,.08), transparent 30%),
+
+        #eef4ff !important;
+}
+
+body.light-mode .welcome-box,
+body.light-mode .menu-card,
+body.light-mode .price-card,
+body.light-mode .contact-item,
+body.light-mode .test-bot-box,
+body.light-mode .sidebar,
+body.light-mode .header{
+    background:rgba(255,255,255,.7) !important;
+    color:#111827 !important;
+    border:1px solid rgba(0,0,0,.06) !important;
+}
+
+body.light-mode .theme-toggle{
+    background:#111827 !important;
+    color:white !important;
+}
+
+body.light-mode .enter-btn,
+body.light-mode .btn-primary,
+body.light-mode .btn-small,
+body.light-mode .btn-modal{
+    background:linear-gradient(
+        135deg,
+        #2563eb,
+        #7c3aed
+    ) !important;
+
+    color:white !important;
+}
+
+body.light-mode .sidebar-nav a.active{
+    background:rgba(37,99,235,.12) !important;
+}
+
+body.light-mode p,
+body.light-mode span,
+body.light-mode h1,
+body.light-mode h2,
+body.light-mode h3{
+    color:#111827 !important;
+}
+
+</style>
+
+<script>
+
+document.addEventListener("DOMContentLoaded",()=>{
+
+    const toggle =
+    document.getElementById("themeBtn");
+
+    if(toggle){
+
+        toggle.addEventListener("click",()=>{
+
+            const light =
+            document.body.classList.contains("light-mode");
+
+            if(light){
+                toggle.innerHTML = "🌙";
+            }else{
+                toggle.innerHTML = "☀️";
+            }
+
+        });
+
+    }
+
+});
+
+</script>
+
 </body>
 </html>

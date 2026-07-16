@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Er-Shop</title>
+    <title>Erlan-Store</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <style>
-        /* ─── RESET & BASE ─── */
+        /* ============================
+                   RESET & BASE
+                ============================ */
         * {
             margin: 0;
             padding: 0;
@@ -17,57 +19,212 @@
         }
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: #0b0e1a;
+            background: #050816;
             color: #e8ecf4;
             min-height: 100vh;
-            display: flex;
             overflow-x: hidden;
+            transition: background .4s, color .4s;
         }
-
         ::-webkit-scrollbar {
-            width: 6px;
+            width: 5px;
         }
         ::-webkit-scrollbar-track {
-            background: #0b0e1a;
+            background: #050816;
         }
         ::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, #1a8cff, #6c5ce7);
-            border-radius: 10px;
+            background: linear-gradient(180deg, #2563eb, #7c3aed);
+            border-radius: 20px;
         }
 
-        /* ─── SIDEBAR ─── */
+        /* ============================
+                   GLOW ORBS (bg)
+                ============================ */
+        .bg-orbs {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .bg-orbs span {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: .35;
+            animation: orbFloat 16s infinite alternate ease-in-out;
+        }
+        .bg-orbs span:nth-child(1) {
+            width: 280px;
+            height: 280px;
+            background: rgba(37, 99, 235, .18);
+            top: -5%;
+            left: -5%;
+        }
+        .bg-orbs span:nth-child(2) {
+            width: 340px;
+            height: 340px;
+            background: rgba(124, 58, 237, .15);
+            bottom: -8%;
+            right: -5%;
+            animation-delay: -4s;
+        }
+        .bg-orbs span:nth-child(3) {
+            width: 200px;
+            height: 200px;
+            background: rgba(0, 212, 255, .10);
+            top: 45%;
+            left: 45%;
+            animation-delay: -8s;
+        }
+        @keyframes orbFloat {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                transform: translate(40px, -30px) scale(1.1);
+            }
+        }
+
+        /* ============================
+                   WELCOME SCREEN
+                ============================ */
+        .welcome-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 999999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at top left, rgba(37, 99, 235, .12), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(124, 58, 237, .12), transparent 30%),
+                #050816;
+            transition: opacity .7s ease, visibility .7s ease;
+        }
+        .welcome-screen.hide {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .welcome-box {
+            width: min(92%, 480px);
+            padding: 48px 32px;
+            border-radius: 32px;
+            text-align: center;
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid rgba(255, 255, 255, .08);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, .5), 0 0 40px rgba(37, 99, 235, .06);
+            animation: welcomeIn 1s ease;
+        }
+        @keyframes welcomeIn {
+            0% {
+                opacity: 0;
+                transform: scale(.92) translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        .welcome-badge {
+            display: inline-block;
+            padding: 6px 20px;
+            border-radius: 999px;
+            background: rgba(37, 99, 235, .12);
+            color: #6cb6ff;
+            font-size: .8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+        .welcome-box h1 {
+            font-size: 2.6rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        .welcome-box h1 span {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .welcome-box p {
+            color: #94a3b8;
+            font-size: 1.05rem;
+            margin-bottom: 28px;
+            letter-spacing: .5px;
+        }
+        .enter-btn {
+            border: none;
+            outline: none;
+            padding: 14px 36px;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+            cursor: pointer;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            transition: .3s ease;
+            box-shadow: 0 8px 30px rgba(37, 99, 235, .25);
+        }
+        .enter-btn:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 14px 40px rgba(37, 99, 235, .35);
+        }
+
+        /* ============================
+                   MAIN CONTENT (hidden until enter)
+                ============================ */
+        .main-content {
+            opacity: 0;
+            transform: translateY(24px);
+            pointer-events: none;
+            transition: opacity .8s ease, transform .8s ease;
+            margin-left: 260px;
+            padding: 0 40px 40px;
+            min-height: 100vh;
+        }
+        .main-content.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        /* ============================
+                   SIDEBAR
+                ============================ */
         .sidebar {
             position: fixed;
             top: 0;
             left: 0;
             height: 100vh;
             width: 260px;
-            background: rgba(11, 14, 26, 0.92);
-            backdrop-filter: blur(18px);
-            border-right: 1px solid rgba(26, 140, 255, 0.15);
+            background: rgba(8, 11, 22, .88);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, .06);
             padding: 28px 0 20px;
             display: flex;
             flex-direction: column;
             z-index: 1000;
-            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            box-shadow: 4px 0 40px rgba(0, 0, 0, 0.4);
+            transition: transform .4s cubic-bezier(.25, .46, .45, .94);
+            box-shadow: 4px 0 50px rgba(0, 0, 0, .4);
             overflow-y: auto;
         }
         .sidebar-brand {
             text-align: center;
-            padding: 0 20px 30px;
-            border-bottom: 1px solid rgba(26, 140, 255, 0.1);
+            padding: 0 20px 28px;
+            border-bottom: 1px solid rgba(255, 255, 255, .06);
             margin-bottom: 16px;
         }
         .sidebar-brand h1 {
-            font-size: 1.8rem;
+            font-size: 1.7rem;
             font-weight: 800;
-            background: linear-gradient(135deg, #1a8cff, #6c5ce7, #00d4ff);
+            background: linear-gradient(135deg, #2563eb, #7c3aed, #06b6d4);
             background-size: 300% 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: gradShift 5s ease-in-out infinite;
-            letter-spacing: 1px;
+            animation: gradShift 6s ease-in-out infinite;
+            letter-spacing: .5px;
         }
         @keyframes gradShift {
             0%,
@@ -79,11 +236,11 @@
             }
         }
         .sidebar-brand .sub {
-            font-size: 0.75rem;
-            color: #8892b0;
+            font-size: .7rem;
+            color: #64748b;
             letter-spacing: 3px;
-            margin-top: 4px;
-            -webkit-text-fill-color: #8892b0;
+            margin-top: 2px;
+            -webkit-text-fill-color: #64748b;
         }
 
         .sidebar-nav {
@@ -91,127 +248,114 @@
             padding: 0 14px;
         }
         .sidebar-nav .nav-label {
-            font-size: 0.7rem;
+            font-size: .65rem;
             text-transform: uppercase;
             letter-spacing: 2px;
-            color: #4a5568;
-            padding: 12px 16px 6px;
+            color: #475569;
+            padding: 10px 16px 6px;
             font-weight: 600;
         }
         .sidebar-nav a {
             display: flex;
             align-items: center;
             gap: 14px;
-            padding: 12px 18px;
-            margin: 4px 0;
+            padding: 11px 18px;
+            margin: 3px 0;
             border-radius: 12px;
-            color: #b0b8d0;
+            color: #94a3b8;
             text-decoration: none;
             font-weight: 500;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
+            font-size: .92rem;
+            transition: all .3s ease;
             position: relative;
-            overflow: hidden;
+            border: 1px solid transparent;
         }
         .sidebar-nav a i {
             width: 22px;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             text-align: center;
-            transition: 0.3s;
-        }
-        .sidebar-nav a::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(26, 140, 255, 0.08), rgba(108, 92, 231, 0.08));
-            opacity: 0;
-            border-radius: 12px;
-            transition: 0.4s;
-        }
-        .sidebar-nav a:hover::before,
-        .sidebar-nav a.active::before {
-            opacity: 1;
+            transition: .3s;
         }
         .sidebar-nav a:hover,
         .sidebar-nav a.active {
             color: #fff;
-            transform: translateX(6px);
+            background: rgba(37, 99, 235, .10);
+            border-color: rgba(37, 99, 235, .15);
+            transform: translateX(4px);
+            box-shadow: 0 0 20px rgba(37, 99, 235, .06);
         }
         .sidebar-nav a:hover i,
         .sidebar-nav a.active i {
-            color: #1a8cff;
-            transform: scale(1.1);
+            color: #2563eb;
         }
         .sidebar-nav a .badge-dot {
             margin-left: auto;
-            width: 8px;
-            height: 8px;
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
-            background: #1a8cff;
-            animation: pulse-dot 2s infinite;
+            background: #2563eb;
+            animation: pulseDot 2s infinite;
         }
-        @keyframes pulse-dot {
+        @keyframes pulseDot {
             0%,
             100% {
                 opacity: 1;
                 transform: scale(1);
             }
             50% {
-                opacity: 0.3;
-                transform: scale(0.7);
+                opacity: .3;
+                transform: scale(.7);
             }
         }
 
         .sidebar-footer {
-            padding: 20px 24px 0;
-            border-top: 1px solid rgba(26, 140, 255, 0.08);
+            padding: 18px 24px 0;
+            border-top: 1px solid rgba(255, 255, 255, .05);
             text-align: center;
-            font-size: 0.75rem;
-            color: #4a5568;
+            font-size: .7rem;
+            color: #475569;
         }
         .sidebar-footer .social-links {
             display: flex;
             justify-content: center;
-            gap: 16px;
-            margin-bottom: 10px;
+            gap: 18px;
+            margin-bottom: 8px;
         }
         .sidebar-footer .social-links a {
-            color: #4a5568;
+            color: #475569;
             font-size: 1.1rem;
-            transition: 0.3s;
+            transition: .3s;
         }
         .sidebar-footer .social-links a:hover {
-            color: #1a8cff;
-            transform: translateY(-2px);
+            color: #2563eb;
+            transform: translateY(-3px);
         }
 
-        /* ─── SIDEBAR TOGGLE ─── */
         .sidebar-toggle {
             display: none;
             position: fixed;
             top: 16px;
             left: 16px;
             z-index: 1100;
-            background: rgba(11, 14, 26, 0.8);
+            background: rgba(8, 11, 22, .8);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(26, 140, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, .08);
             color: #fff;
             padding: 10px 14px;
             border-radius: 12px;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             cursor: pointer;
-            transition: 0.3s;
+            transition: .3s;
         }
         .sidebar-toggle:hover {
-            background: rgba(26, 140, 255, 0.15);
-            border-color: #1a8cff;
+            background: rgba(37, 99, 235, .12);
+            border-color: #2563eb;
         }
-
         .sidebar-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, .5);
             z-index: 999;
             backdrop-filter: blur(4px);
         }
@@ -219,45 +363,41 @@
             display: block;
         }
 
-        /* ─── MAIN CONTENT ─── */
-        .main-content {
-            margin-left: 260px;
-            flex: 1;
-            padding: 0 40px 40px;
-            min-height: 100vh;
-            transition: margin-left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
+        /* ============================
+                   HEADER
+                ============================ */
         .header {
-            padding: 32px 0 24px;
-            border-bottom: 1px solid rgba(26, 140, 255, 0.06);
+            padding: 22px 26px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, .03);
+            border: 1px solid rgba(255, 255, 255, .05);
+            backdrop-filter: blur(14px);
             margin-bottom: 32px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 16px;
+            gap: 12px;
         }
         .header-left h2 {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 700;
-            background: linear-gradient(135deg, #1a8cff, #6c5ce7);
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: gradShift 4s ease-in-out infinite;
         }
         .header-left p {
-            color: #8892b0;
-            font-size: 0.95rem;
+            color: #94a3b8;
+            font-size: .92rem;
             margin-top: 2px;
         }
         .header-right .status-badge {
-            background: rgba(26, 140, 255, 0.1);
-            border: 1px solid rgba(26, 140, 255, 0.15);
-            padding: 6px 18px;
+            background: rgba(37, 99, 235, .08);
+            border: 1px solid rgba(37, 99, 235, .12);
+            padding: 5px 18px;
             border-radius: 40px;
-            font-size: 0.8rem;
-            color: #64b5f6;
+            font-size: .78rem;
+            color: #6cb6ff;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -266,262 +406,378 @@
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: #4caf50;
-            animation: pulse-dot 1.8s infinite;
+            background: #22c55e;
+            animation: pulseDot 1.8s infinite;
         }
 
-        /* ─── SECTION TITLE ─── */
+        /* ============================
+                   PAGE SECTIONS
+                ============================ */
+        .page-section {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity .5s ease, transform .5s ease;
+        }
+        .page-section.active-page {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         .section-title {
-            font-size: clamp(1.4rem, 2.5vw, 2rem);
+            font-size: clamp(1.3rem, 2.2vw, 1.9rem);
             font-weight: 700;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             display: flex;
             align-items: center;
             gap: 12px;
         }
         .section-title .highlight {
-            background: linear-gradient(135deg, #1a8cff, #6c5ce7);
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         .section-title i {
-            color: #1a8cff;
-            font-size: 1.6rem;
+            color: #2563eb;
+            font-size: 1.5rem;
         }
         .section-sub {
-            color: #8892b0;
-            margin-bottom: 28px;
-            font-size: 1rem;
+            color: #94a3b8;
+            margin-bottom: 24px;
+            font-size: .95rem;
         }
         .section-divider {
-            width: 60px;
+            width: 56px;
             height: 3px;
-            background: linear-gradient(90deg, #1a8cff, #6c5ce7);
             border-radius: 4px;
-            margin: 6px 0 20px;
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+            margin: 4px 0 18px;
         }
 
-        /* ─── DAFTAR MENU ─── */
+        /* ============================
+                   MENU GRID
+                ============================ */
         .menu-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 20px;
             margin-bottom: 40px;
         }
-
         .menu-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 16px;
-            padding: 24px 20px;
+            background: rgba(255, 255, 255, .03);
+            border: 1px solid rgba(255, 255, 255, .06);
+            border-radius: 18px;
+            padding: 24px 18px;
             text-align: center;
-            transition: 0.3s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            transition: .4s ease;
+            backdrop-filter: blur(10px);
         }
         .menu-card:hover {
-            border-color: rgba(26, 140, 255, 0.15);
-            transform: translateY(-4px);
-            box-shadow: 0 8px 28px rgba(26, 140, 255, 0.04);
+            border-color: rgba(37, 99, 235, .18);
+            transform: translateY(-6px);
+            box-shadow: 0 12px 40px rgba(37, 99, 235, .06), 0 0 0 1px rgba(255, 255, 255, .03);
         }
         .menu-card .icon {
-            font-size: 2.8rem;
-            margin-bottom: 10px;
+            font-size: 2.6rem;
+            margin-bottom: 8px;
         }
         .menu-card h4 {
             font-weight: 600;
             color: #fff;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
         }
         .menu-card p {
-            color: #8892b0;
-            font-size: 0.85rem;
+            color: #94a3b8;
+            font-size: .82rem;
             margin: 4px 0 16px;
         }
         .menu-card .action-btn {
-            background: rgba(26, 140, 255, 0.08);
-            border: 1px solid rgba(26, 140, 255, 0.1);
+            background: rgba(37, 99, 235, .08);
+            border: 1px solid rgba(37, 99, 235, .1);
             color: #fff;
             padding: 8px 24px;
             border-radius: 40px;
-            font-size: 0.85rem;
+            font-size: .82rem;
             font-weight: 500;
             cursor: pointer;
-            transition: 0.35s;
+            transition: .35s ease;
             text-decoration: none;
             display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+        .menu-card .action-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .12), transparent);
+            transition: .6s;
+        }
+        .menu-card .action-btn:hover::after {
+            left: 120%;
         }
         .menu-card .action-btn:hover {
-            background: linear-gradient(135deg, #1a8cff, #6c5ce7);
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
             border-color: transparent;
-            box-shadow: 0 4px 20px rgba(26, 140, 255, 0.2);
-            transform: scale(1.04);
+            box-shadow: 0 4px 24px rgba(37, 99, 235, .2);
+            transform: scale(1.03);
         }
         .menu-card .action-btn.outline {
             background: transparent;
-            border-color: rgba(255, 255, 255, 0.08);
-            color: #b0b8d0;
+            border-color: rgba(255, 255, 255, .08);
+            color: #94a3b8;
         }
         .menu-card .action-btn.outline:hover {
-            background: rgba(26, 140, 255, 0.08);
-            border-color: #1a8cff;
+            background: rgba(37, 99, 235, .06);
+            border-color: #2563eb;
             color: #fff;
             box-shadow: none;
             transform: none;
         }
 
-        /* ─── PRICE SECTIONS ─── */
+        /* ============================
+                   PRICE SECTIONS (dengan animasi)
+                ============================ */
         .price-section {
-            margin-bottom: 48px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            margin-bottom: 44px;
         }
+        .price-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         .price-group-title {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 600;
-            margin: 0 0 16px;
+            margin: 0 0 14px;
             display: flex;
             align-items: center;
             gap: 12px;
             color: #fff;
+            flex-wrap: wrap;
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 3px solid transparent;
+            width: 0;
+            transition: none;
         }
+        .price-section.visible .price-group-title {
+            animation: typing 2s steps(30) forwards, blink 0.8s step-end infinite;
+        }
+        @keyframes typing {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
+        }
+        @keyframes blink {
+            0%,
+            100% {
+                border-color: transparent;
+            }
+            50% {
+                border-color: #2563eb;
+            }
+        }
+
         .price-group-title .badge {
-            font-size: 0.7rem;
-            background: rgba(26, 140, 255, 0.12);
-            color: #64b5f6;
+            font-size: .65rem;
+            background: rgba(37, 99, 235, .1);
+            color: #6cb6ff;
             padding: 2px 14px;
             border-radius: 40px;
-            border: 1px solid rgba(26, 140, 255, 0.1);
+            border: 1px solid rgba(37, 99, 235, .08);
             font-weight: 400;
+            flex-shrink: 0;
         }
+
         .price-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 14px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
         }
+
         .price-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, .03);
+            border: 1px solid rgba(255, 255, 255, .05);
             border-radius: 14px;
-            padding: 16px 20px;
+            padding: 14px 18px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 10px;
-            transition: all 0.35s ease;
+            gap: 8px;
+            transition: all .35s ease;
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: opacity 0.5s ease, transform 0.5s ease, background 0.3s, border-color 0.3s;
         }
+        .price-section.visible .price-card {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .price-section.visible .price-card:nth-child(1) {
+            transition-delay: 0.05s;
+        }
+        .price-section.visible .price-card:nth-child(2) {
+            transition-delay: 0.10s;
+        }
+        .price-section.visible .price-card:nth-child(3) {
+            transition-delay: 0.15s;
+        }
+        .price-section.visible .price-card:nth-child(4) {
+            transition-delay: 0.20s;
+        }
+        .price-section.visible .price-card:nth-child(5) {
+            transition-delay: 0.25s;
+        }
+        .price-section.visible .price-card:nth-child(6) {
+            transition-delay: 0.30s;
+        }
+        .price-section.visible .price-card:nth-child(7) {
+            transition-delay: 0.35s;
+        }
+        .price-section.visible .price-card:nth-child(8) {
+            transition-delay: 0.40s;
+        }
+
         .price-card:hover {
-            border-color: rgba(26, 140, 255, 0.2);
-            background: rgba(26, 140, 255, 0.04);
-            transform: translateX(6px);
+            border-color: rgba(37, 99, 235, .18);
+            background: rgba(37, 99, 235, .04);
+            transform: translateX(4px);
         }
         .price-card .label {
             font-weight: 500;
-            color: #e0e4f0;
-            font-size: 0.95rem;
-        }
-        .price-card .label .flag {
-            margin-right: 6px;
+            color: #e2e8f0;
+            font-size: .92rem;
         }
         .price-card .price {
             font-weight: 700;
-            font-size: 1.05rem;
-            color: #1a8cff;
-            background: rgba(26, 140, 255, 0.06);
+            font-size: 1rem;
+            color: #2563eb;
+            background: rgba(37, 99, 235, .06);
             padding: 2px 16px;
             border-radius: 40px;
-            border: 1px solid rgba(26, 140, 255, 0.08);
-            transition: 0.3s;
+            border: 1px solid rgba(37, 99, 235, .08);
+            transition: .3s;
         }
         .price-card:hover .price {
-            background: rgba(26, 140, 255, 0.12);
-            border-color: rgba(26, 140, 255, 0.2);
+            background: rgba(37, 99, 235, .12);
+            border-color: rgba(37, 99, 235, .18);
         }
         .price-card .btn-small {
-            background: rgba(26, 140, 255, 0.08);
-            border: 1px solid rgba(26, 140, 255, 0.1);
+            background: rgba(37, 99, 235, .08);
+            border: 1px solid rgba(37, 99, 235, .1);
             color: #fff;
-            padding: 5px 18px;
+            padding: 4px 18px;
             border-radius: 40px;
-            font-size: 0.75rem;
+            font-size: .72rem;
             cursor: pointer;
-            transition: 0.35s;
+            transition: .35s ease;
             font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+        .price-card .btn-small::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .12), transparent);
+            transition: .6s;
+        }
+        .price-card .btn-small:hover::after {
+            left: 120%;
         }
         .price-card .btn-small:hover {
-            background: linear-gradient(135deg, #1a8cff, #6c5ce7);
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
             border-color: transparent;
-            box-shadow: 0 4px 16px rgba(26, 140, 255, 0.2);
+            box-shadow: 0 4px 16px rgba(37, 99, 235, .2);
             transform: scale(1.04);
         }
 
         .theme-erwi .price {
             color: #b388ff;
-            border-color: rgba(179, 136, 255, 0.12);
-            background: rgba(179, 136, 255, 0.06);
+            border-color: rgba(179, 136, 255, .12);
+            background: rgba(179, 136, 255, .06);
         }
         .theme-erwi .price-card:hover .price {
-            background: rgba(179, 136, 255, 0.12);
-            border-color: rgba(179, 136, 255, 0.2);
+            background: rgba(179, 136, 255, .12);
+            border-color: rgba(179, 136, 255, .2);
         }
         .theme-erwi .btn-small:hover {
             background: linear-gradient(135deg, #b388ff, #7c5cfc);
         }
         .theme-erwi .badge {
-            background: rgba(179, 136, 255, 0.1);
+            background: rgba(179, 136, 255, .1);
             color: #b388ff;
-            border-color: rgba(179, 136, 255, 0.1);
+            border-color: rgba(179, 136, 255, .1);
         }
 
         .theme-proto .price {
             color: #4dd0e1;
-            border-color: rgba(77, 208, 225, 0.12);
-            background: rgba(77, 208, 225, 0.06);
+            border-color: rgba(77, 208, 225, .12);
+            background: rgba(77, 208, 225, .06);
         }
         .theme-proto .price-card:hover .price {
-            background: rgba(77, 208, 225, 0.12);
-            border-color: rgba(77, 208, 225, 0.2);
+            background: rgba(77, 208, 225, .12);
+            border-color: rgba(77, 208, 225, .2);
         }
         .theme-proto .btn-small:hover {
             background: linear-gradient(135deg, #4dd0e1, #00bcd4);
         }
         .theme-proto .badge {
-            background: rgba(77, 208, 225, 0.1);
+            background: rgba(77, 208, 225, .1);
             color: #4dd0e1;
-            border-color: rgba(77, 208, 225, 0.1);
+            border-color: rgba(77, 208, 225, .1);
         }
 
         .total-fitur {
             margin-top: 12px;
-            padding: 8px 20px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 6px 20px;
+            background: rgba(255, 255, 255, .02);
+            border: 1px solid rgba(255, 255, 255, .04);
             border-radius: 10px;
             display: inline-block;
-            color: #8892b0;
-            font-size: 0.9rem;
+            color: #94a3b8;
+            font-size: .85rem;
         }
         .total-fitur strong {
-            color: #1a8cff;
+            color: #2563eb;
         }
 
-        /* ─── TEST BOT ─── */
+        /* ============================
+                   TEST BOT
+                ============================ */
         .test-bot-box {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 18px;
-            padding: 28px 32px;
-            margin: 24px 0 16px;
+            background: rgba(255, 255, 255, .03);
+            border: 1px solid rgba(255, 255, 255, .05);
+            border-radius: 20px;
+            padding: 26px 32px;
+            margin: 20px 0 12px;
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
             gap: 20px;
-            transition: 0.4s;
+            transition: .4s ease;
+            backdrop-filter: blur(10px);
         }
         .test-bot-box:hover {
-            border-color: rgba(26, 140, 255, 0.12);
-            box-shadow: 0 8px 32px rgba(26, 140, 255, 0.04);
+            border-color: rgba(37, 99, 235, .12);
+            box-shadow: 0 8px 40px rgba(37, 99, 235, .04);
         }
         .test-bot-box .left {
             display: flex;
@@ -530,9 +786,9 @@
         }
         .test-bot-box .left .big-icon {
             font-size: 2.2rem;
-            animation: float 3s ease-in-out infinite;
+            animation: floatIcon 3s ease-in-out infinite;
         }
-        @keyframes float {
+        @keyframes floatIcon {
             0%,
             100% {
                 transform: translateY(0);
@@ -543,11 +799,11 @@
         }
         .test-bot-box .left .info h4 {
             color: #fff;
-            font-size: 1.05rem;
+            font-size: 1rem;
         }
         .test-bot-box .left .info p {
-            color: #8892b0;
-            font-size: 0.88rem;
+            color: #94a3b8;
+            font-size: .85rem;
         }
         .test-bot-box .btn-group {
             display: flex;
@@ -559,257 +815,481 @@
             padding: 10px 26px;
             border-radius: 40px;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: .85rem;
             cursor: pointer;
-            transition: 0.4s;
+            transition: .4s ease;
             text-decoration: none;
             display: inline-block;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+        .test-bot-box .btn-primary::after,
+        .test-bot-box .btn-secondary::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .12), transparent);
+            transition: .6s;
+        }
+        .test-bot-box .btn-primary:hover::after,
+        .test-bot-box .btn-secondary:hover::after {
+            left: 120%;
         }
         .test-bot-box .btn-primary {
-            background: linear-gradient(135deg, #1a8cff, #6c5ce7);
-            border: none;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
             color: #fff;
-            box-shadow: 0 4px 20px rgba(26, 140, 255, 0.2);
+            box-shadow: 0 4px 24px rgba(37, 99, 235, .2);
         }
         .test-bot-box .btn-primary:hover {
             transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 8px 32px rgba(26, 140, 255, 0.3);
+            box-shadow: 0 8px 36px rgba(37, 99, 235, .3);
         }
         .test-bot-box .btn-secondary {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid rgba(255, 255, 255, .08);
             color: #fff;
         }
         .test-bot-box .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: #1a8cff;
+            background: rgba(255, 255, 255, .08);
+            border-color: #2563eb;
             transform: translateY(-3px);
         }
+        .test-bot-foot {
+            text-align: center;
+            color: #94a3b8;
+            font-size: .92rem;
+            margin-top: 4px;
+        }
 
-        /* ─── CONTACT ─── */
+        /* ============================
+                   CONTACT
+                ============================ */
         .contact-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 18px;
+            margin-top: 12px;
         }
         .contact-item {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 14px;
-            padding: 22px 18px;
+            background: rgba(255, 255, 255, .03);
+            border: 1px solid rgba(255, 255, 255, .05);
+            border-radius: 16px;
+            padding: 22px 16px;
             text-align: center;
-            transition: 0.4s;
+            transition: .4s ease;
+            backdrop-filter: blur(8px);
         }
         .contact-item:hover {
             transform: translateY(-4px);
-            border-color: rgba(26, 140, 255, 0.15);
-            box-shadow: 0 8px 28px rgba(26, 140, 255, 0.04);
+            border-color: rgba(37, 99, 235, .15);
+            box-shadow: 0 8px 32px rgba(37, 99, 235, .04);
         }
         .contact-item .icon {
-            font-size: 2rem;
-            margin-bottom: 6px;
+            font-size: 1.8rem;
+            margin-bottom: 4px;
         }
         .contact-item h4 {
             font-weight: 600;
             color: #fff;
-            font-size: 1rem;
+            font-size: .95rem;
         }
         .contact-item p {
-            font-size: 0.85rem;
-            color: #8892b0;
+            font-size: .8rem;
+            color: #94a3b8;
         }
         .contact-item .btn-outline {
             margin-top: 10px;
             display: inline-block;
-            padding: 5px 20px;
+            padding: 4px 20px;
             border-radius: 40px;
-            border: 1px solid rgba(26, 140, 255, 0.2);
+            border: 1px solid rgba(37, 99, 235, .2);
             color: #fff;
             text-decoration: none;
-            font-size: 0.8rem;
-            transition: 0.35s;
+            font-size: .75rem;
+            transition: .35s ease;
             font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+        .contact-item .btn-outline::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .1), transparent);
+            transition: .6s;
+        }
+        .contact-item .btn-outline:hover::after {
+            left: 120%;
         }
         .contact-item .btn-outline:hover {
-            background: linear-gradient(135deg, #1a8cff, #6c5ce7);
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
             border-color: transparent;
-            box-shadow: 0 4px 16px rgba(26, 140, 255, 0.15);
+            box-shadow: 0 4px 16px rgba(37, 99, 235, .12);
         }
 
-        /* ─── PAYMENT ─── */
+        /* ============================
+                   PAYMENT
+                ============================ */
         .payment-methods {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 14px;
-            margin: 20px 0 6px;
+            gap: 12px;
+            margin: 16px 0 4px;
         }
         .payment-methods .chip {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, .03);
+            border: 1px solid rgba(255, 255, 255, .05);
             border-radius: 40px;
-            padding: 8px 22px;
-            font-size: 0.9rem;
+            padding: 7px 20px;
+            font-size: .85rem;
             font-weight: 500;
-            color: #e0e4f0;
+            color: #e2e8f0;
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            transition: 0.3s;
+            transition: .3s ease;
+            backdrop-filter: blur(6px);
         }
         .payment-methods .chip:hover {
-            border-color: rgba(26, 140, 255, 0.15);
-            background: rgba(26, 140, 255, 0.04);
+            border-color: rgba(37, 99, 235, .12);
+            background: rgba(37, 99, 235, .04);
         }
         .payment-methods .chip .sub {
             font-weight: 300;
-            color: #1a8cff;
-            font-size: 0.75rem;
+            color: #2563eb;
+            font-size: .7rem;
         }
         .payment-methods .chip button {
-            background: rgba(26, 140, 255, 0.08);
+            background: rgba(37, 99, 235, .08);
             border: none;
             color: #fff;
             padding: 2px 14px;
             border-radius: 40px;
-            font-size: 0.7rem;
+            font-size: .68rem;
             cursor: pointer;
-            transition: 0.3s;
+            transition: .3s ease;
             font-weight: 500;
         }
         .payment-methods .chip button:hover {
-            background: linear-gradient(135deg, #1a8cff, #6c5ce7);
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
         }
         .payment-methods .chip .qris-btn {
-            background: rgba(26, 140, 255, 0.08);
-            border: 1px solid rgba(26, 140, 255, 0.1);
-            color: #1a8cff;
-            padding: 3px 16px;
+            background: rgba(37, 99, 235, .08);
+            border: 1px solid rgba(37, 99, 235, .1);
+            color: #2563eb;
+            padding: 2px 16px;
             border-radius: 40px;
-            font-size: 0.75rem;
+            font-size: .72rem;
             cursor: pointer;
-            transition: 0.35s;
+            transition: .35s ease;
             font-weight: 500;
         }
         .payment-methods .chip .qris-btn:hover {
-            background: #1a8cff;
+            background: #2563eb;
             color: #fff;
-            border-color: #1a8cff;
+            border-color: #2563eb;
         }
 
-        /* ─── MODAL ─── */
+        /* ============================
+                   MODALS
+                ============================ */
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, .6);
+            backdrop-filter: blur(12px);
             z-index: 2000;
             display: none;
             align-items: center;
             justify-content: center;
             padding: 24px;
-            animation: fadeIn 0.3s ease;
         }
         .modal-overlay.open {
             display: flex;
         }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
         .modal-box {
             background: #141a2e;
-            border: 1px solid rgba(26, 140, 255, 0.15);
+            border: 1px solid rgba(37, 99, 235, .12);
             border-radius: 24px;
-            max-width: 460px;
+            max-width: 440px;
             width: 100%;
-            padding: 34px 30px 28px;
+            padding: 32px 28px 26px;
             position: relative;
-            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, .5);
+            animation: modalIn .35s ease;
+            backdrop-filter: blur(20px);
+        }
+        @keyframes modalIn {
+            0% {
+                opacity: 0;
+                transform: scale(.92) translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
         .modal-box .close {
             position: absolute;
-            top: 14px;
-            right: 18px;
+            top: 12px;
+            right: 16px;
             background: none;
             border: none;
-            color: #8892b0;
+            color: #64748b;
             font-size: 1.6rem;
             cursor: pointer;
-            transition: 0.3s;
+            transition: .3s;
         }
         .modal-box .close:hover {
             color: #fff;
             transform: rotate(90deg);
         }
         .modal-box .modal-icon {
-            font-size: 2.8rem;
-            margin-bottom: 6px;
-        }
-        .modal-box h2 {
-            font-size: 1.3rem;
-            color: #fff;
+            font-size: 2.6rem;
             margin-bottom: 4px;
         }
+        .modal-box h2 {
+            font-size: 1.2rem;
+            color: #fff;
+            margin-bottom: 2px;
+        }
         .modal-box p {
-            color: #8892b0;
-            font-size: 0.95rem;
+            color: #94a3b8;
+            font-size: .92rem;
         }
         .modal-box .modal-price {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            color: #1a8cff;
-            margin: 12px 0 18px;
+            color: #2563eb;
+            margin: 10px 0 16px;
         }
         .modal-box .btn-modal {
-            background: linear-gradient(135deg, #1a8cff, #6c5ce7);
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
             border: none;
             color: #fff;
             padding: 12px;
             border-radius: 40px;
             font-weight: 600;
-            font-size: 1rem;
+            font-size: .95rem;
             cursor: pointer;
-            transition: 0.35s;
+            transition: .35s ease;
             width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        .modal-box .btn-modal::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .12), transparent);
+            transition: .6s;
+        }
+        .modal-box .btn-modal:hover::after {
+            left: 120%;
         }
         .modal-box .btn-modal:hover {
-            box-shadow: 0 4px 24px rgba(26, 140, 255, 0.25);
+            box-shadow: 0 4px 28px rgba(37, 99, 235, .25);
             transform: scale(1.01);
         }
         .modal-box .btn-modal.secondary {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid rgba(255, 255, 255, .06);
             margin-top: 10px;
         }
         .modal-box .btn-modal.secondary:hover {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, .08);
             box-shadow: none;
             transform: none;
         }
         .modal-box img.qris-preview {
             width: 100%;
-            max-width: 260px;
+            max-width: 240px;
             border-radius: 14px;
-            margin: 10px auto;
+            margin: 8px auto;
             display: block;
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, .06);
         }
 
-        /* ─── RESPONSIVE ─── */
+        /* ============================
+                   FOOTER
+                ============================ */
+        .main-footer {
+            margin-top: 40px;
+            padding-top: 18px;
+            border-top: 1px solid rgba(255, 255, 255, .04);
+            text-align: center;
+            color: #475569;
+            font-size: .8rem;
+        }
+
+        /* ============================
+                   THEME TOGGLE
+                ============================ */
+        .theme-toggle {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 99999;
+            padding: 12px 14px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, .08);
+            background: rgba(8, 11, 22, .8);
+            backdrop-filter: blur(12px);
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: .3s ease;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .theme-toggle:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 0 24px rgba(37, 99, 235, .15);
+            border-color: rgba(37, 99, 235, .2);
+        }
+
+        /* ============================
+                   LIGHT MODE
+                ============================ */
+        body.light-mode {
+            background: #f0f4ff;
+            color: #0f172a;
+        }
+        body.light-mode .bg-orbs span {
+            opacity: .15;
+        }
+        body.light-mode .sidebar {
+            background: rgba(255, 255, 255, .85);
+            border-right: 1px solid rgba(0, 0, 0, .06);
+        }
+        body.light-mode .sidebar-brand .sub {
+            -webkit-text-fill-color: #64748b;
+        }
+        body.light-mode .sidebar-nav a {
+            color: #334155;
+        }
+        body.light-mode .sidebar-nav a:hover,
+        body.light-mode .sidebar-nav a.active {
+            background: rgba(37, 99, 235, .08);
+            border-color: rgba(37, 99, 235, .12);
+            color: #0f172a;
+        }
+        body.light-mode .sidebar-footer {
+            border-color: rgba(0, 0, 0, .06);
+        }
+        body.light-mode .sidebar-footer .social-links a {
+            color: #64748b;
+        }
+        body.light-mode .sidebar-footer .social-links a:hover {
+            color: #2563eb;
+        }
+        body.light-mode .header {
+            background: rgba(255, 255, 255, .6);
+            border-color: rgba(0, 0, 0, .05);
+        }
+        body.light-mode .header-left p {
+            color: #475569;
+        }
+        body.light-mode .menu-card,
+        body.light-mode .price-card,
+        body.light-mode .contact-item,
+        body.light-mode .test-bot-box {
+            background: rgba(255, 255, 255, .6);
+            border-color: rgba(0, 0, 0, .05);
+        }
+        body.light-mode .menu-card h4,
+        body.light-mode .price-group-title,
+        body.light-mode .test-bot-box .left .info h4,
+        body.light-mode .contact-item h4 {
+            color: #0f172a;
+        }
+        body.light-mode .menu-card p,
+        body.light-mode .price-card .label,
+        body.light-mode .test-bot-box .left .info p,
+        body.light-mode .contact-item p,
+        body.light-mode .section-sub,
+        body.light-mode .total-fitur {
+            color: #475569;
+        }
+        body.light-mode .price-card .price {
+            background: rgba(37, 99, 235, .06);
+        }
+        body.light-mode .modal-box {
+            background: #f8faff;
+            border-color: rgba(0, 0, 0, .06);
+        }
+        body.light-mode .modal-box h2 {
+            color: #0f172a;
+        }
+        body.light-mode .modal-box p {
+            color: #475569;
+        }
+        body.light-mode .theme-toggle {
+            background: rgba(255, 255, 255, .8);
+            color: #0f172a;
+            border-color: rgba(0, 0, 0, .06);
+        }
+        body.light-mode .welcome-screen {
+            background: radial-gradient(circle at top left, rgba(37, 99, 235, .06), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(124, 58, 237, .06), transparent 30%),
+                #f0f4ff;
+        }
+        body.light-mode .welcome-box {
+            background: rgba(255, 255, 255, .7);
+            border-color: rgba(0, 0, 0, .06);
+        }
+        body.light-mode .welcome-box h1 {
+            color: #0f172a;
+        }
+        body.light-mode .welcome-box p {
+            color: #475569;
+        }
+        body.light-mode .payment-methods .chip {
+            background: rgba(255, 255, 255, .6);
+            border-color: rgba(0, 0, 0, .05);
+            color: #0f172a;
+        }
+        body.light-mode .payment-methods .chip button {
+            color: #0f172a;
+        }
+        body.light-mode .payment-methods .chip .qris-btn {
+            color: #2563eb;
+        }
+        body.light-mode .header-right .status-badge {
+            color: #2563eb;
+        }
+        body.light-mode .sidebar-toggle {
+            background: rgba(255, 255, 255, .8);
+            color: #0f172a;
+            border-color: rgba(0, 0, 0, .06);
+        }
+        body.light-mode .main-footer {
+            border-color: rgba(0, 0, 0, .06);
+            color: #94a3b8;
+        }
+
+        /* ============================
+                   RESPONSIVE
+                ============================ */
         @media (max-width: 1024px) {
             .main-content {
                 padding: 0 28px 30px;
             }
         }
-
         @media (max-width: 820px) {
             .sidebar {
                 transform: translateX(-100%);
@@ -844,8 +1324,14 @@
             .test-bot-box .btn-group {
                 justify-content: center;
             }
+            .theme-toggle {
+                bottom: 16px;
+                right: 16px;
+                width: 44px;
+                height: 44px;
+                font-size: 1rem;
+            }
         }
-
         @media (max-width: 480px) {
             .main-content {
                 padding: 72px 14px 24px;
@@ -857,355 +1343,75 @@
                 grid-template-columns: 1fr;
             }
             .price-card {
-                padding: 14px 16px;
+                padding: 12px 14px;
             }
             .contact-grid {
                 grid-template-columns: 1fr;
             }
             .payment-methods .chip {
-                padding: 6px 14px;
-                font-size: 0.8rem;
+                padding: 5px 12px;
+                font-size: .75rem;
             }
             .modal-box {
-                padding: 24px 18px 20px;
+                padding: 22px 16px 18px;
             }
             .header-left h2 {
-                font-size: 1.3rem;
+                font-size: 1.2rem;
             }
             .menu-card {
-                padding: 18px 14px;
+                padding: 16px 12px;
             }
             .menu-card .icon {
-                font-size: 2.2rem;
+                font-size: 2rem;
+            }
+            .welcome-box {
+                padding: 32px 20px;
+            }
+            .welcome-box h1 {
+                font-size: 2rem;
+            }
+            .test-bot-box {
+                padding: 20px 18px;
+            }
+            .theme-toggle {
+                bottom: 12px;
+                right: 12px;
+                width: 40px;
+                height: 40px;
+                font-size: .9rem;
             }
         }
-    
-/* ===== PAGE SYSTEM ===== */
-
-.page-section{
-    display:none;
-    opacity:0;
-    transform:translateX(30px);
-    transition:.4s ease;
-}
-
-.page-section.active-page{
-    display:block;
-    opacity:1;
-    transform:translateX(0);
-}
-
-/* ===== ACTIVE MENU ===== */
-
-.sidebar-nav a.active{
-    background:linear-gradient(
-        135deg,
-        rgba(26,140,255,.16),
-        rgba(108,92,231,.16)
-    );
-
-    border:1px solid rgba(26,140,255,.2);
-
-    box-shadow:
-        0 0 18px rgba(26,140,255,.18);
-}
-
-
-/* ===== MODERN UI UPGRADE ===== */
-
-body{
-    background:
-        radial-gradient(circle at top left, rgba(26,140,255,.12), transparent 30%),
-        radial-gradient(circle at bottom right, rgba(108,92,231,.12), transparent 30%),
-        #0b0e1a;
-}
-
-.main-content{
-    animation: fadeMain .6s ease;
-}
-
-@keyframes fadeMain{
-    from{
-        opacity:0;
-        transform:translateY(20px);
-    }
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-
-.sidebar{
-    background:rgba(8,11,20,.88);
-    border-right:1px solid rgba(255,255,255,.06);
-    box-shadow:0 0 40px rgba(26,140,255,.08);
-}
-
-.header{
-    background:rgba(255,255,255,.02);
-    border:1px solid rgba(255,255,255,.04);
-    padding:22px 26px;
-    border-radius:24px;
-    backdrop-filter:blur(14px);
-}
-
-.menu-card,
-.price-card,
-.contact-item,
-.test-bot-box,
-.modal-box{
-    backdrop-filter:blur(14px);
-    background:rgba(255,255,255,.03);
-    border:1px solid rgba(255,255,255,.06);
-}
-
-.menu-card:hover,
-.price-card:hover,
-.contact-item:hover{
-    box-shadow:
-        0 12px 30px rgba(26,140,255,.10),
-        0 0 0 1px rgba(255,255,255,.03);
-}
-
-.action-btn,
-.btn-small,
-.btn-primary,
-.btn-outline,
-.btn-modal{
-    position:relative;
-    overflow:hidden;
-}
-
-.action-btn::before,
-.btn-small::before,
-.btn-primary::before,
-.btn-outline::before,
-.btn-modal::before{
-    content:'';
-    position:absolute;
-    top:0;
-    left:-120%;
-    width:100%;
-    height:100%;
-    background:linear-gradient(
-        90deg,
-        transparent,
-        rgba(255,255,255,.18),
-        transparent
-    );
-    transition:.6s;
-}
-
-.action-btn:hover::before,
-.btn-small:hover::before,
-.btn-primary:hover::before,
-.btn-outline:hover::before,
-.btn-modal:hover::before{
-    left:120%;
-}
-
-html{
-    scroll-behavior:smooth;
-}
-
-</style>
+    </style>
 </head>
 <body>
 
-<!-- ===== LOBBY SCREEN ===== -->
-<div class="welcome-screen" id="welcomeScreen">
-
-    <div class="welcome-box">
-
-        <div class="welcome-badge">
-            ER-SHOP AI
-        </div>
-
-        <h1>
-            Welcome To <span>Er-Shop</span>
-        </h1>
-
-        <p>
-            Modern AI Dashboard Store Experience
-        </p>
-
-        <button class="enter-btn" id="enterWebsite">
-            Masuk Ke Website
-        </button>
-
+    <!-- ===== BG ORBS ===== -->
+    <div class="bg-orbs">
+        <span></span>
+        <span></span>
+        <span></span>
     </div>
 
-</div>
+    <!-- ===== WELCOME SCREEN ===== -->
+    <div class="welcome-screen" id="welcomeScreen">
+        <div class="welcome-box">
+            <div class="welcome-badge">✦ Erlan-Store</div>
+            <h1>Welcome To <span>Erlan-Store</span></h1>
+            <p>Layanan Digital Premium &amp; Terpercaya</p>
+            <button class="enter-btn" id="enterWebsite">🚀 Masuk ke Store</button>
+        </div>
+    </div>
 
-<style>
-
-.welcome-screen{
-    position:fixed;
-    inset:0;
-    z-index:999999;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:
-        radial-gradient(circle at top left,
-        rgba(26,140,255,.15), transparent 30%),
-
-        radial-gradient(circle at bottom right,
-        rgba(108,92,231,.15), transparent 30%),
-
-        #070b14;
-
-    transition:.7s ease;
-}
-
-.welcome-screen.hide{
-    opacity:0;
-    visibility:hidden;
-}
-
-.welcome-box{
-    width:min(92%, 500px);
-    padding:50px 35px;
-    border-radius:32px;
-    text-align:center;
-
-    background:rgba(255,255,255,.04);
-
-    border:1px solid rgba(255,255,255,.08);
-
-    backdrop-filter:blur(16px);
-
-    box-shadow:
-        0 20px 60px rgba(0,0,0,.35),
-        0 0 30px rgba(26,140,255,.08);
-}
-
-.welcome-badge{
-    display:inline-block;
-    padding:8px 18px;
-    border-radius:999px;
-    background:rgba(26,140,255,.12);
-    color:#6cb6ff;
-    margin-bottom:18px;
-    font-size:.85rem;
-    letter-spacing:1px;
-}
-
-.welcome-box h1{
-    color:white;
-    font-size:2.3rem;
-    margin-bottom:12px;
-}
-
-.welcome-box h1 span{
-    background:linear-gradient(90deg,#1a8cff,#8b5cf6);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-}
-
-.welcome-box p{
-    color:#94a3b8;
-    margin-bottom:32px;
-}
-
-.enter-btn{
-    border:none;
-    outline:none;
-    padding:16px 28px;
-    border-radius:16px;
-    cursor:pointer;
-    font-size:1rem;
-    font-weight:600;
-    color:white;
-
-    background:linear-gradient(
-        135deg,
-        #1a8cff,
-        #8b5cf6
-    );
-
-    transition:.3s ease;
-}
-
-.enter-btn:hover{
-    transform:translateY(-4px) scale(1.02);
-
-    box-shadow:
-        0 12px 30px rgba(26,140,255,.25);
-}
-
-.main-hidden{
-    opacity:0;
-    transform:translateY(20px);
-    pointer-events:none;
-    transition:.7s ease;
-}
-
-.main-visible{
-    opacity:1;
-    transform:translateY(0);
-    pointer-events:auto;
-}
-
-</style>
-
-
-<div class="bg-particles">
-    <span></span>
-    <span></span>
-    <span></span>
-</div>
-
-<style>
-.bg-particles span{
-    position:fixed;
-    width:220px;
-    height:220px;
-    border-radius:50%;
-    background:rgba(26,140,255,.06);
-    filter:blur(30px);
-    z-index:-1;
-    animation:floatParticle 12s infinite alternate ease-in-out;
-}
-
-.bg-particles span:nth-child(1){
-    top:5%;
-    left:5%;
-}
-
-.bg-particles span:nth-child(2){
-    bottom:10%;
-    right:8%;
-    background:rgba(108,92,231,.06);
-}
-
-.bg-particles span:nth-child(3){
-    top:45%;
-    left:40%;
-    background:rgba(0,212,255,.04);
-}
-
-@keyframes floatParticle{
-    from{
-        transform:translateY(0) translateX(0);
-    }
-    to{
-        transform:translateY(-40px) translateX(30px);
-    }
-}
-</style>
-
-
-    <!-- ─── SIDEBAR TOGGLE ─── -->
+    <!-- ===== SIDEBAR TOGGLE ===== -->
     <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
         <i class="fas fa-bars"></i>
     </button>
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- ─── SIDEBAR ─── -->
+    <!-- ===== SIDEBAR ===== -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-brand">
-            <h1>✦ Er-Shop</h1>
+            <h1>✦ Erlan-Store</h1>
             <div class="sub">✦ Layanan Digital ✦</div>
         </div>
         <nav class="sidebar-nav">
@@ -1233,14 +1439,14 @@ html{
                 <a href="https://chat.whatsapp.com/Jn7f8YJxLSJI1PZt4bW0Q2" target="_blank" title="Grup"><i class="fas fa-users"></i></a>
                 <a href="https://whatsapp.com/channel/0029VakAQVdL2ATyevv9TM2b" target="_blank" title="Saluran"><i class="fas fa-bullhorn"></i></a>
             </div>
-            <p>&copy; 2026 Er-Shop</p>
+            <p>&copy; 2026 Erlan-Store</p>
         </div>
     </aside>
 
-    <!-- ─── MAIN CONTENT ─── -->
-    <main class="main-content">
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="main-content" id="mainContent">
 
-        <!-- ─── HEADER ─── -->
+        <!-- HEADER -->
         <header class="header">
             <div class="header-left">
                 <h2>✦ Selamat Datang</h2>
@@ -1253,7 +1459,7 @@ html{
             </div>
         </header>
 
-        <!-- ─── DAFTAR MENU ─── -->
+        <!-- ===== QUICK MENU ===== -->
         <section id="quickMenu" class="page-section active-page">
             <div class="section-title">
                 <i class="fas fa-th-large"></i>
@@ -1261,41 +1467,35 @@ html{
             </div>
             <div class="section-divider"></div>
             <p class="section-sub">Klik tombol untuk melihat harga di bagian bawah</p>
-
             <div class="menu-grid">
-
                 <div class="menu-card">
                     <span class="icon">📱</span>
                     <h4>Nomor Kosong</h4>
                     <p>Virtual number berbagai negara</p>
                     <button class="action-btn" data-scroll="emptyNumbers">🔽 Lihat Harga</button>
                 </div>
-
                 <div class="menu-card">
                     <span class="icon">💉</span>
                     <h4>Suntik Sosmed</h4>
                     <p>Boost interaksi &amp; engagement</p>
                     <button class="action-btn outline" data-modal="sosmed">ℹ️ Info Layanan</button>
                 </div>
-
                 <div class="menu-card">
                     <span class="icon">🤖</span>
                     <h4>Sewa Bot Erwi</h4>
                     <p>900+ fitur siap pakai</p>
                     <button class="action-btn" data-scroll="botErwi">🔽 Lihat Harga</button>
                 </div>
-
                 <div class="menu-card">
                     <span class="icon">⚙️</span>
                     <h4>Run Bot Prototype</h4>
                     <p>1.000+ fitur premium</p>
                     <button class="action-btn" data-scroll="botPrototype">🔽 Lihat Harga</button>
                 </div>
-
             </div>
         </section>
 
-        <!-- ─── HARGA LAYANAN ─── -->
+        <!-- ===== PRICES ===== -->
         <section id="prices" class="page-section">
             <div class="section-title">
                 <i class="fas fa-tags"></i>
@@ -1305,60 +1505,59 @@ html{
             <p class="section-sub">Pilih paket yang sesuai, klik "Pesan" untuk chat via WhatsApp</p>
 
             <!-- Nomor Kosong -->
-            <div class="price-section">
-                <div class="price-group-title" id="emptyNumbers">
+            <div class="price-section" id="emptyNumbers">
+                <div class="price-group-title">
                     📱 Nomor Kosong
                     <span class="badge">Virtual Number</span>
                 </div>
                 <div class="price-grid">
-                    <div class="price-card"><span class="label">🇮🇩 +62</span><span class="price">6K</span><button class="btn-small" data-item="+62" data-price="6K" data-service="Nomor Kosong">Pesan</button></div>
-                    <div class="price-card"><span class="label">🇨🇦 +1</span><span class="price">10K</span><button class="btn-small" data-item="+1" data-price="10K" data-service="Nomor Kosong">Pesan</button></div>
+                    <div class="price-card"><span class="label">🇮🇩 +62</span><span class="price">5K</span><button class="btn-small" data-item="+62" data-price="5K" data-service="Nomor Kosong">Pesan</button></div>
                     <div class="price-card"><span class="label">🇵🇭 +63</span><span class="price">5K</span><button class="btn-small" data-item="+63" data-price="5K" data-service="Nomor Kosong">Pesan</button></div>
+                    <div class="price-card"><span class="label">🇨🇦 +1</span><span class="price">10K</span><button class="btn-small" data-item="+1" data-price="10K" data-service="Nomor Kosong">Pesan</button></div>
                     <div class="price-card"><span class="label">🇨🇴 +57</span><span class="price">5K</span><button class="btn-small" data-item="+57" data-price="5K" data-service="Nomor Kosong">Pesan</button></div>
                     <div class="price-card"><span class="label">🇲🇾 +60</span><span class="price">6K</span><button class="btn-small" data-item="+60" data-price="6K" data-service="Nomor Kosong">Pesan</button></div>
                     <div class="price-card"><span class="label">🇹🇭 +66</span><span class="price">6K</span><button class="btn-small" data-item="+66" data-price="6K" data-service="Nomor Kosong">Pesan</button></div>
                     <div class="price-card"><span class="label">🇰🇭 +855</span><span class="price">10K</span><button class="btn-small" data-item="+855" data-price="10K" data-service="Nomor Kosong">Pesan</button></div>
-                    <div class="price-card" style="border-color:rgba(26,140,255,0.15);"><span class="label">💬 Tanya Saja</span><span class="price" style="color:#1a8cff;">—</span><button class="btn-small" style="border-color:#1a8cff;color:#1a8cff;" data-item="Tanya Saja" data-price="—" data-service="Nomor Kosong">Hubungi</button></div>
+                    <div class="price-card" style="border-color:rgba(37,99,235,.15);"><span class="label">💬 Tanya Saja</span><span class="price" style="color:#2563eb;">—</span><button class="btn-small" style="border-color:#2563eb;color:#2563eb;" data-item="Tanya Saja" data-price="—" data-service="Nomor Kosong">Hubungi</button></div>
                 </div>
             </div>
 
             <!-- Sewa Bot Erwi -->
-            <div class="price-section theme-erwi">
-                <div class="price-group-title" id="botErwi">
+            <div class="price-section theme-erwi" id="botErwi">
+                <div class="price-group-title">
                     🌊 Sewa Bot Erwi
                     <span class="badge">900+ Fitur</span>
                 </div>
                 <div class="price-grid">
                     <div class="price-card"><span class="label">✧ 2 Minggu</span><span class="price">6K</span><button class="btn-small" data-item="2 Minggu" data-price="6K" data-service="Sewa Bot Erwi">Pesan</button></div>
-                    <div class="price-card"><span class="label">✧ 2 Bulan</span><span class="price">10K</span><button class="btn-small" data-item="2 Bulan" data-price="10K" data-service="Sewa Bot Erwi">Pesan</button></div>
-                    <div class="price-card"><span class="label">✧ 4 Bulan</span><span class="price">15K</span><button class="btn-small" data-item="4 Bulan" data-price="15K" data-service="Sewa Bot Erwi">Pesan</button></div>
-                    <div class="price-card"><span class="label">✧ 11 Bulan</span><span class="price">20K</span><button class="btn-small" data-item="11 Bulan" data-price="20K" data-service="Sewa Bot Erwi">Pesan</button></div>
+                    <div class="price-card"><span class="label">✧ 1 Bulan</span><span class="price">10K</span><button class="btn-small" data-item="1 Bulan" data-price="10K" data-service="Sewa Bot Erwi">Pesan</button></div>
+                    <div class="price-card"><span class="label">✧ 3 Bulan</span><span class="price">15K</span><button class="btn-small" data-item="3 Bulan" data-price="15K" data-service="Sewa Bot Erwi">Pesan</button></div>
+                    <div class="price-card"><span class="label">✧ 10 Bulan</span><span class="price">20K</span><button class="btn-small" data-item="10 Bulan" data-price="20K" data-service="Sewa Bot Erwi">Pesan</button></div>
                     <div class="price-card"><span class="label">✧ 1 Tahun</span><span class="price">21K</span><button class="btn-small" data-item="1 Tahun" data-price="21K" data-service="Sewa Bot Erwi">Pesan</button></div>
-                    <div class="price-card" style="border-color:rgba(179,136,255,0.2);"><span class="label">⭐ 2 Tahun + 1 Bulan Premium</span><span class="price" style="color:#b388ff;">35K</span><button class="btn-small" style="border-color:#b388ff;color:#b388ff;" data-item="2 Tahun + 1 Bulan Premium" data-price="35K" data-service="Sewa Bot Erwi">Pesan</button></div>
+                    <div class="price-card" style="border-color:rgba(179,136,255,.2);"><span class="label">⭐ 2 Tahun</span><span class="price" style="color:#b388ff;">35K</span><button class="btn-small" style="border-color:#b388ff;color:#b388ff;" data-item="2 Tahun" data-price="35K" data-service="Sewa Bot Erwi">Pesan</button></div>
                 </div>
                 <div class="total-fitur">📊 Total Fitur : <strong>900+</strong></div>
             </div>
 
             <!-- Sewa Bot Prototype -->
-            <div class="price-section theme-proto">
-                <div class="price-group-title" id="botPrototype">
+            <div class="price-section theme-proto" id="botPrototype">
+                <div class="price-group-title">
                     📺 Sewa Bot Prototype
                     <span class="badge">1.000+ Fitur</span>
                 </div>
                 <div class="price-grid">
-                    <div class="price-card"><span class="label">✧ 3 Minggu</span><span class="price">6K</span><button class="btn-small" data-item="3 Minggu" data-price="6K" data-service="Sewa Bot Prototype">Pesan</button></div>
-                    <div class="price-card"><span class="label">✧ 3 Bulan</span><span class="price">10K</span><button class="btn-small" data-item="3 Bulan" data-price="10K" data-service="Sewa Bot Prototype">Pesan</button></div>
-                    <div class="price-card"><span class="label">✧ 5 Bulan</span><span class="price">17K</span><button class="btn-small" data-item="5 Bulan" data-price="17K" data-service="Sewa Bot Prototype">Pesan</button></div>
-                    <div class="price-card"><span class="label">✧ 1 Tahun</span><span class="price">25K</span><button class="btn-small" data-item="1 Tahun" data-price="25K" data-service="Sewa Bot Prototype">Pesan</button></div>
-                    <div class="price-card"><span class="label">✧ 3 Tahun</span><span class="price">30K</span><button class="btn-small" data-item="3 Tahun" data-price="30K" data-service="Sewa Bot Prototype">Pesan</button></div>
-                    <div class="price-card"><span class="label">✧ 5 Tahun</span><span class="price">35K</span><button class="btn-small" data-item="5 Tahun" data-price="35K" data-service="Sewa Bot Prototype">Pesan</button></div>
-                    <div class="price-card" style="border-color:rgba(77,208,225,0.2);"><span class="label">⭐ 10 Tahun + 2 Minggu Premium</span><span class="price" style="color:#4dd0e1;">40K</span><button class="btn-small" style="border-color:#4dd0e1;color:#4dd0e1;" data-item="10 Tahun + 2 Minggu Premium" data-price="40K" data-service="Sewa Bot Prototype">Pesan</button></div>
+                    <div class="price-card"><span class="label">✧ 3 Minggu</span><span class="price">10K</span><button class="btn-small" data-item="3 Minggu" data-price="10K" data-service="Sewa Bot Prototype">Pesan</button></div>
+                    <div class="price-card"><span class="label">✧ 5 Bulan</span><span class="price">15K</span><button class="btn-small" data-item="5 Bulan" data-price="15K" data-service="Sewa Bot Prototype">Pesan</button></div>
+                    <div class="price-card"><span class="label">✧ 10 Bulan</span><span class="price">25K</span><button class="btn-small" data-item="10 Bulan" data-price="25K" data-service="Sewa Bot Prototype">Pesan</button></div>
+                    <div class="price-card"><span class="label">✧ 1 Tahun</span><span class="price">30K</span><button class="btn-small" data-item="1 Tahun" data-price="30K" data-service="Sewa Bot Prototype">Pesan</button></div>
+                    <div class="price-card"><span class="label">✧ 3 Tahun</span><span class="price">35K</span><button class="btn-small" data-item="3 Tahun" data-price="35K" data-service="Sewa Bot Prototype">Pesan</button></div>
+                    <div class="price-card" style="border-color:rgba(77,208,225,.2);"><span class="label">⭐ 5 Tahun</span><span class="price" style="color:#4dd0e1;">45K</span><button class="btn-small" style="border-color:#4dd0e1;color:#4dd0e1;" data-item="5 Tahun" data-price="45K" data-service="Sewa Bot Prototype">Pesan</button></div>
                 </div>
                 <div class="total-fitur">📊 Total Fitur : <strong>1.000+</strong></div>
             </div>
         </section>
 
-        <!-- ─── TEST BOT ─── -->
+        <!-- ===== TEST BOT ===== -->
         <section id="test-bot" class="page-section">
             <div class="test-bot-box">
                 <div class="left">
@@ -1373,12 +1572,10 @@ html{
                     <a href="https://chat.whatsapp.com/Jn7f8YJxLSJI1PZt4bW0Q2" target="_blank" class="btn-secondary">👥 Test Prototype (Grup)</a>
                 </div>
             </div>
-            <p style="text-align:center;color:#8892b0;margin-top:6px;font-size:0.95rem;">
-                🏪 Anda Puas, Kami Pun Senang 🤗
-            </p>
+            <p class="test-bot-foot">🏪 Anda Puas, Kami Pun Senang 🤗</p>
         </section>
 
-        <!-- ─── CONTACT ─── -->
+        <!-- ===== CONTACT ===== -->
         <section id="contact" class="page-section">
             <div class="section-title">
                 <i class="fas fa-phone-alt"></i>
@@ -1408,7 +1605,7 @@ html{
             </div>
         </section>
 
-        <!-- ─── PAYMENT ─── -->
+        <!-- ===== PAYMENT ===== -->
         <section id="payment" class="page-section">
             <div class="section-title">
                 <i class="fas fa-credit-card"></i>
@@ -1430,12 +1627,12 @@ html{
             </div>
         </section>
 
-        <footer style="margin-top:40px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.04);text-align:center;color:#4a5568;font-size:0.85rem;">
-            <p>&copy; 2026 Er-Shop — Dibangun dengan ❤️ untuk pelayanan terbaik</p>
+        <footer class="main-footer">
+            <p>&copy; 2026 Erlan-Store — Dibangun dengan ❤️ untuk pelayanan terbaik</p>
         </footer>
     </main>
 
-    <!-- ─── MODAL ─── -->
+    <!-- ===== MODAL UMUM ===== -->
     <div class="modal-overlay" id="modal">
         <div class="modal-box">
             <button class="close" id="modalClose">&times;</button>
@@ -1448,21 +1645,36 @@ html{
         </div>
     </div>
 
-    <!-- ─── QRIS MODAL ─── -->
+    <!-- ===== MODAL QRIS ===== -->
     <div class="modal-overlay" id="qrisModal">
         <div class="modal-box" style="max-width:400px;">
             <button class="close" id="qrisModalClose">&times;</button>
             <h2 style="text-align:center;">📱 Scan QRIS</h2>
-            <p style="text-align:center;color:#8892b0;margin-bottom:10px;">Gunakan aplikasi pembayaran untuk scan</p>
+            <p style="text-align:center;color:#94a3b8;margin-bottom:8px;">Gunakan aplikasi pembayaran untuk scan</p>
             <img src="https://cdn.nekohime.site/file/bf8s3i9j.jpeg" alt="QRIS" class="qris-preview" />
             <button class="btn-modal secondary" id="qrisModalCloseBtn">Tutup</button>
         </div>
     </div>
 
-    <!-- ─── JAVASCRIPT ─── -->
+    <!-- ===== THEME TOGGLE ===== -->
+    <button class="theme-toggle" id="themeBtn" aria-label="Toggle theme">🌙</button>
+
+    <!-- ============================
+    JAVASCRIPT
+    ============================ -->
     <script>
         (function() {
             'use strict';
+
+            // ─── WELCOME SCREEN ───
+            const welcome = document.getElementById('welcomeScreen');
+            const enterBtn = document.getElementById('enterWebsite');
+            const mainContent = document.getElementById('mainContent');
+
+            enterBtn.addEventListener('click', function() {
+                welcome.classList.add('hide');
+                mainContent.classList.add('visible');
+            });
 
             // ─── SIDEBAR ───
             const sidebar = document.getElementById('sidebar');
@@ -1476,18 +1688,40 @@ html{
             toggle.addEventListener('click', toggleSidebar);
             overlay.addEventListener('click', toggleSidebar);
 
-            document.querySelectorAll('.sidebar-nav a').forEach(link => {
+            // ─── NAVIGATION ───
+            const navLinks = document.querySelectorAll('.sidebar-nav a');
+            const sections = document.querySelectorAll('.page-section');
+
+            function showPage(id) {
+                sections.forEach(function(s) {
+                    s.classList.remove('active-page');
+                    s.style.display = 'none';
+                });
+                const target = document.querySelector(id);
+                if (target) {
+                    target.style.display = 'block';
+                    requestAnimationFrame(function() {
+                        target.classList.add('active-page');
+                    });
+                }
+            }
+
+            navLinks.forEach(function(link) {
                 link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    navLinks.forEach(function(l) { l.classList.remove('active'); });
+                    this.classList.add('active');
+                    const target = this.getAttribute('href');
+                    showPage(target);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                     if (window.innerWidth <= 820) {
                         sidebar.classList.remove('open');
                         overlay.classList.remove('active');
                     }
-                    document.querySelectorAll('.sidebar-nav a').forEach(l => l.classList.remove('active'));
-                    this.classList.add('active');
                 });
             });
 
-            // ─── SCROLL BUTTONS (Daftar Menu) ───
+            // ─── SCROLL BUTTONS ───
             document.querySelectorAll('[data-scroll]').forEach(function(btn) {
                 btn.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -1495,14 +1729,9 @@ html{
                     const targetEl = document.getElementById(targetId);
                     if (targetEl) {
                         targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        // Highlight effect
                         targetEl.style.transition = 'color 0.3s';
-                        targetEl.style.color = '#1a8cff';
-                        setTimeout(function() {
-                            targetEl.style.color = '';
-                        }, 800);
-                    } else {
-                        console.warn('Target element not found:', targetId);
+                        targetEl.style.color = '#2563eb';
+                        setTimeout(function() { targetEl.style.color = ''; }, 800);
                     }
                 });
             });
@@ -1528,9 +1757,10 @@ html{
                         window.open(data.waLink, '_blank');
                     } else {
                         const msg = encodeURIComponent(
-                            `Halo Er-Shop, saya tertarik dengan ${data.title} (${data.price || '—'}).`
+                            'Halo Erlan-Store, saya tertarik dengan ' + data.title + ' (' + (data.price || '—') +
+                            ').'
                         );
-                        window.open(`https://wa.me/62895322098098?text=${msg}`, '_blank');
+                        window.open('https://wa.me/62895322098098?text=' + msg, '_blank');
                     }
                     closeModal();
                 };
@@ -1552,49 +1782,46 @@ html{
                 if (e.key === 'Escape') closeModal();
             });
 
-            // ─── MODAL TRIGGER (Suntik Sosmed) ───
-            document.querySelectorAll('[data-modal]').forEach(function(btn) {
+            // ─── MODAL: Suntik Sosmed ───
+            document.querySelectorAll('[data-modal="sosmed"]').forEach(function(btn) {
                 btn.addEventListener('click', function(e) {
                     e.stopPropagation();
-                    if (this.getAttribute('data-modal') === 'sosmed') {
-                        openModal({
-                            icon: '💉',
-                            title: 'Suntik Sosmed',
-                            desc: 'Layanan boost interaksi media sosial. Meningkatkan visibilitas dan engagement akun Anda.',
-                            price: 'Mulai 10K',
-                            action: 'Tanya Harga',
-                            waLink: 'https://wa.me/62895322098098?text=Saya%20tertarik%20dengan%20Suntik%20Sosmed'
-                        });
-                    }
+                    openModal({
+                        icon: '💉',
+                        title: 'Suntik Sosmed',
+                        desc: 'Layanan boost interaksi media sosial. Meningkatkan visibilitas dan engagement akun Anda.',
+                        price: 'Mulai 10K',
+                        action: 'Tanya Harga',
+                        waLink: 'https://wa.me/62895322098098?text=Saya%20tertarik%20dengan%20Suntik%20Sosmed'
+                    });
                 });
             });
 
-            // ─── PRICE CARD BUTTONS (Pesan) ───
+            // ─── PRICE CARD BUTTONS ───
             document.querySelectorAll('.btn-small').forEach(function(btn) {
                 btn.addEventListener('click', function(e) {
                     e.stopPropagation();
                     const item = this.getAttribute('data-item') || 'Layanan';
                     const price = this.getAttribute('data-price') || '—';
                     const service = this.getAttribute('data-service') || 'Layanan';
-
                     let extra = '';
                     if (service.includes('Erwi')) extra = ' (900+ fitur)';
                     else if (service.includes('Prototype')) extra = ' (1.000+ fitur)';
-
                     openModal({
                         icon: '🛒',
                         title: service,
-                        desc: `Anda memilih ${item}${extra}. Silakan konfirmasi pemesanan Anda.`,
-                        price: `💰 ${price}`,
+                        desc: 'Anda memilih ' + item + extra + '. Silakan konfirmasi pemesanan Anda.',
+                        price: '💰 ' + price,
                         action: 'Konfirmasi via WA',
-                        waLink: `https://wa.me/62895322098098?text=${encodeURIComponent(
-                            `Halo Er-Shop, saya ingin memesan ${service} - ${item} dengan harga ${price}.`
-                        )}`
+                        waLink: 'https://wa.me/62895322098098?text=' + encodeURIComponent(
+                            'Halo Erlan-Store, saya ingin memesan ' + service + ' - ' + item +
+                            ' dengan harga ' + price + '.'
+                        )
                     });
                 });
             });
 
-            // ─── QRIS ───
+            // ─── QRIS MODAL ───
             const qrisModal = document.getElementById('qrisModal');
             const qrisModalClose = document.getElementById('qrisModalClose');
             const qrisModalCloseBtn = document.getElementById('qrisModalCloseBtn');
@@ -1623,14 +1850,16 @@ html{
                         const orig = btn.textContent;
                         btn.textContent = '✅ Tersalin!';
                         setTimeout(function() { btn.textContent = orig; }, 2000);
-                    }).catch(function() { alert('Salin manual: ' + number); });
+                    }).catch(function() {
+                        alert('Salin manual: ' + number);
+                    });
                 } else {
-                    const textarea = document.createElement('textarea');
-                    textarea.value = number;
-                    document.body.appendChild(textarea);
-                    textarea.select();
+                    const ta = document.createElement('textarea');
+                    ta.value = number;
+                    document.body.appendChild(ta);
+                    ta.select();
                     document.execCommand('copy');
-                    document.body.removeChild(textarea);
+                    document.body.removeChild(ta);
                     const btn = document.getElementById('copyNumberBtn');
                     const orig = btn.textContent;
                     btn.textContent = '✅ Tersalin!';
@@ -1638,362 +1867,45 @@ html{
                 }
             });
 
-        })();
-    </script>
+            // ─── THEME TOGGLE ───
+            const themeBtn = document.getElementById('themeBtn');
+            let isLight = false;
 
-
-<script>
-
-/* ===== PAGE SYSTEM ===== */
-
-document.addEventListener("DOMContentLoaded", function(){
-
-    const sections =
-    document.querySelectorAll(".page-section");
-
-    const navLinks =
-    document.querySelectorAll(".sidebar-nav a");
-
-    function showPage(id){
-
-        sections.forEach(section=>{
-
-            section.classList.remove("active-page");
-
-            section.style.display = "none";
-
-        });
-
-        const target =
-        document.querySelector(id);
-
-        if(target){
-
-            target.style.display = "block";
-
-            setTimeout(()=>{
-
-                target.classList.add("active-page");
-
-            },50);
-
-        }
-
-    }
-
-    navLinks.forEach(link=>{
-
-        link.addEventListener("click", function(e){
-
-            e.preventDefault();
-
-            navLinks.forEach(l=>
-                l.classList.remove("active")
-            );
-
-            this.classList.add("active");
-
-            const target =
-            this.getAttribute("href");
-
-            showPage(target);
-
-            window.scrollTo({
-                top:0,
-                behavior:"smooth"
+            themeBtn.addEventListener('click', function() {
+                isLight = !isLight;
+                document.body.classList.toggle('light-mode', isLight);
+                themeBtn.textContent = isLight ? '☀️' : '🌙';
             });
 
-        });
-
-    });
-
-});
-
-</script>
-
-
-<script>
-
-document.addEventListener("DOMContentLoaded", function(){
-
-    const welcome =
-    document.getElementById("welcomeScreen");
-
-    const enterBtn =
-    document.getElementById("enterWebsite");
-
-    const main =
-    document.querySelector(".main-content");
-
-    if(main){
-        main.classList.add("main-hidden");
-    }
-
-    enterBtn.addEventListener("click", function(){
-
-        welcome.classList.add("hide");
-
-        if(main){
-
-            main.classList.remove("main-hidden");
-
-            setTimeout(()=>{
-                main.classList.add("main-visible");
-            },100);
-
-        }
-
-    });
-
-});
-
-</script>
-
-
-<style>
-/* ===== ULTRA MODERN ANIMATION PACK ===== */
-
-body{
-background:
-radial-gradient(circle at top left,rgba(0,212,255,.12),transparent 25%),
-radial-gradient(circle at bottom right,rgba(139,92,246,.15),transparent 25%),
-#050816;
-overflow-x:hidden;
-}
-
-body::before{
-content:'';
-position:fixed;
-inset:0;
-background:
-linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),
-linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
-background-size:40px 40px;
-pointer-events:none;
-}
-
-.menu-card,
-.price-card,
-.contact-item,
-.test-bot-box{
-animation:floatCard 4s ease-in-out infinite alternate;
-}
-
-@keyframes floatCard{
-from{transform:translateY(0px)}
-to{transform:translateY(-8px)}
-}
-
-.menu-card:hover,
-.price-card:hover,
-.contact-item:hover{
-transform:translateY(-10px) scale(1.03);
-box-shadow:
-0 0 30px rgba(0,212,255,.18),
-0 15px 50px rgba(0,0,0,.4);
-}
-
-.welcome-box{
-animation:welcomeZoom 1.2s ease;
-}
-
-@keyframes welcomeZoom{
-from{
-opacity:0;
-transform:scale(.85);
-}
-to{
-opacity:1;
-transform:scale(1);
-}
-}
-
-.enter-btn{
-animation:pulseGlow 2s infinite;
-}
-
-@keyframes pulseGlow{
-0%{box-shadow:0 0 0 rgba(26,140,255,.1)}
-50%{box-shadow:0 0 35px rgba(26,140,255,.45)}
-100%{box-shadow:0 0 0 rgba(26,140,255,.1)}
-}
-
-.ai-orbs{
-position:fixed;
-inset:0;
-pointer-events:none;
-z-index:-1;
-}
-
-.orb{
-position:absolute;
-border-radius:50%;
-filter:blur(35px);
-animation:moveOrb 18s infinite alternate ease-in-out;
-}
-
-.orb:nth-child(1){
-width:220px;
-height:220px;
-background:rgba(0,212,255,.10);
-top:5%;
-left:5%;
-}
-
-.orb:nth-child(2){
-width:260px;
-height:260px;
-background:rgba(139,92,246,.10);
-bottom:10%;
-right:5%;
-}
-
-.orb:nth-child(3){
-width:180px;
-height:180px;
-background:rgba(26,140,255,.08);
-top:50%;
-left:50%;
-}
-
-@keyframes moveOrb{
-to{
-transform:
-translateY(-40px)
-translateX(50px);
-}
-}
-</style>
-
-<div class="ai-orbs">
-<div class="orb"></div>
-<div class="orb"></div>
-<div class="orb"></div>
-</div>
-
-<style>
-.theme-toggle{position:fixed;top:15px;right:15px;z-index:99999;padding:10px 14px;border-radius:12px;border:none;cursor:pointer}
-.light-mode{background:#f4f7ff!important;color:#111!important}
-.typing-text::after{content:'|';animation:blink 1s infinite}
-@keyframes blink{50%{opacity:0}}
-</style>
-<button class="theme-toggle" id="themeBtn">🌙/☀️</button>
-<script>
-document.addEventListener('DOMContentLoaded',()=>{
-const title=document.querySelector('.welcome-box h1');
-if(title){title.innerHTML='<span class="typing-text"></span>';let txt='Welcome To ErlanShops';let i=0;let el=document.querySelector('.typing-text');function type(){if(i<txt.length){el.textContent+=txt.charAt(i);i++;setTimeout(type,90)}} type();}
-const btn=document.getElementById('themeBtn');btn.onclick=()=>document.body.classList.toggle('light-mode');
-const pay=document.getElementById('payment');
-if(pay){pay.innerHTML+='<div style="margin-top:20px"><h3>Metode Pembayaran</h3><p>Dana : 0895322098098</p><p>Gopay : 085709862808</p></div>';pay.innerHTML=pay.innerHTML.replace(/No admin/gi,'');}
-});
-</script>
-
-<style>
-
-/* ===== THEME BUTTON ADAPTIVE ===== */
-
-.theme-toggle{
-    background:rgba(255,255,255,.08);
-    color:white;
-    backdrop-filter:blur(10px);
-    border:1px solid rgba(255,255,255,.12);
-    transition:.3s ease;
-}
-
-.theme-toggle:hover{
-    transform:translateY(-3px);
-    box-shadow:0 0 18px rgba(26,140,255,.25);
-}
-
-/* ===== LIGHT MODE ===== */
-
-body.light-mode{
-    background:#eef4ff !important;
-    color:#111827 !important;
-}
-
-body.light-mode .welcome-screen{
-    background:
-        radial-gradient(circle at top left,
-        rgba(26,140,255,.08), transparent 30%),
-
-        radial-gradient(circle at bottom right,
-        rgba(108,92,231,.08), transparent 30%),
-
-        #eef4ff !important;
-}
-
-body.light-mode .welcome-box,
-body.light-mode .menu-card,
-body.light-mode .price-card,
-body.light-mode .contact-item,
-body.light-mode .test-bot-box,
-body.light-mode .sidebar,
-body.light-mode .header{
-    background:rgba(255,255,255,.7) !important;
-    color:#111827 !important;
-    border:1px solid rgba(0,0,0,.06) !important;
-}
-
-body.light-mode .theme-toggle{
-    background:#111827 !important;
-    color:white !important;
-}
-
-body.light-mode .enter-btn,
-body.light-mode .btn-primary,
-body.light-mode .btn-small,
-body.light-mode .btn-modal{
-    background:linear-gradient(
-        135deg,
-        #2563eb,
-        #7c3aed
-    ) !important;
-
-    color:white !important;
-}
-
-body.light-mode .sidebar-nav a.active{
-    background:rgba(37,99,235,.12) !important;
-}
-
-body.light-mode p,
-body.light-mode span,
-body.light-mode h1,
-body.light-mode h2,
-body.light-mode h3{
-    color:#111827 !important;
-}
-
-</style>
-
-<script>
-
-document.addEventListener("DOMContentLoaded",()=>{
-
-    const toggle =
-    document.getElementById("themeBtn");
-
-    if(toggle){
-
-        toggle.addEventListener("click",()=>{
-
-            const light =
-            document.body.classList.contains("light-mode");
-
-            if(light){
-                toggle.innerHTML = "🌙";
-            }else{
-                toggle.innerHTML = "☀️";
-            }
-
-        });
-
-    }
-
-});
-
-</script>
+            // ─── RESPONSIVE: close sidebar on resize ───
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 820) {
+                    sidebar.classList.remove('open');
+                    overlay.classList.remove('active');
+                }
+            });
+
+            // ─── INTERSECTION OBSERVER UNTUK ANIMASI HARGA ───
+            const priceSections = document.querySelectorAll('.price-section');
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        // Hentikan observer setelah terlihat agar tidak berulang
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.3,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            priceSections.forEach(function(section) {
+                observer.observe(section);
+            });
+
+        })();
+    </script>
 
 </body>
 </html>
